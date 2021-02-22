@@ -1,18 +1,78 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Ext.Common where
 
 import Control.Concurrent
 import Control.Concurrent.MVar
-import qualified System.Environment as Env
+
+import System.Exit (exitFailure)
+import System.FilePath as FP ((</>), joinPath, splitDirectories, takeDirectory)
 import System.IO.Unsafe (unsafePerformIO)
 import System.IO (hFlush, hPutStr, hPutStrLn, stderr, stdout, hClose, openTempFile)
+import qualified System.Directory as Dir
+import qualified System.Environment as Env
 
 
-{- Concurrent debugging
+import Control.Exception ()
+import Formatting (fprint, (%))
+import Formatting.Clock (timeSpecs)
+import System.Clock (Clock(..), getTime)
+
+
+-- Re-exports
+import qualified Data.Function
+
+
+-- Copy of combined internals of Project.getRoot as it seems to notoriously cause cyclic wherever imported
+getProjectRoot :: IO FilePath
+getProjectRoot = do
+  subDir <- Dir.getCurrentDirectory
+  res <- findHelp "elm.json" (FP.splitDirectories subDir)
+  case res of
+    Just filepath -> pure filepath
+    Nothing -> do
+      binName <- Env.getProgName
+      putStrLn $ "Cannot find an elm.json! Make sure you're in a project folder, or run `" <> binName <> " init` to start a new one."
+      debug $ "current directory was: " <> subDir
+      exitFailure
+
+
+findHelp :: FilePath -> [String] -> IO (Maybe FilePath)
+findHelp name dirs =
+  if Prelude.null dirs then
+    return Nothing
+
+  else
+    do  exists_ <- Dir.doesFileExist (FP.joinPath dirs </> name)
+        if exists_
+          then return (Just (FP.joinPath dirs))
+          else findHelp name (Prelude.init dirs)
+
+
+-- Find the project root from an arbitrary fle path
+getProjectRootFor :: FilePath -> IO FilePath
+getProjectRootFor path = do
+  res <- findHelp "elm.json" (FP.splitDirectories $ takeDirectory path)
+  case res of
+    Just filepath -> pure filepath
+    Nothing -> do
+      binName <- Env.getProgName
+      putStrLn $ "Cannot find an elm.json! Make sure you're in a project folder, or run `" <> binName <> " init` to start a new one."
+      exitFailure
+
+
+{- Helpers -}
+
+justs :: [Maybe a] -> [a]
+justs xs = [ x | Just x <- xs ]
+
+
+{- Debugging
 -}
 
 
-debug_ :: String -> IO ()
-debug_ str = do
+debug :: String -> IO ()
+debug str = do
   debugM <- Env.lookupEnv "DEBUG"
   case debugM of
     Just _ -> atomicPutStrLn $ "DEBUG: " ++ str ++ "\n"
@@ -34,6 +94,25 @@ atomicPutStrLn str =
   withMVar printLock (\_ -> hPutStr stdout (str <> "\n") >> hFlush stdout)
 
 
+{- Wrap an IO in basic runtime information
+   Note: this is a very naive implementation and may not always work right,
+   i.e. if the IO value is not fully evaluated
+-}
+-- track :: _ -> IO a -> IO a
+track label io = do
+  m <- getTime Monotonic
+  p <- getTime ProcessCPUTime
+  t <- getTime ThreadCPUTime
+  res <- io
+  m_ <- getTime Monotonic
+  p_ <- getTime ProcessCPUTime
+  t_ <- getTime ThreadCPUTime
+  fprint ("⏱  " % label % ": " % timeSpecs % " " % timeSpecs % " " % timeSpecs % "\n") m m_ p p_ t t_
+  -- fprint (timeSpecs % "\n") p p_
+  -- fprint (timeSpecs % "\n") t t_
+  pure res
+
+
 
 {- GHCI thread management
 
@@ -48,7 +127,6 @@ after a `:r` and avoid issues like a socket port already being in use!
 
 -}
 
-
 trackedForkIO :: IO () -> IO ()
 trackedForkIO io = do
   threadId <- forkIO io
@@ -59,7 +137,7 @@ trackGhciThread :: ThreadId -> IO ()
 trackGhciThread threadId =
   modifyMVar_ ghciThreads
     (\threads -> do
-      debug_ $ "Tracking GHCI thread:" ++ show threadId
+      debug $ "Tracking GHCI thread:" ++ show threadId
       pure $ threadId:threads
     )
 
@@ -70,10 +148,10 @@ killTrackedThreads = do
     (\threads -> do
       case threads of
         [] -> do
-          debug_ $ "No tracked GHCI threads to kill."
+          debug $ "No tracked GHCI threads to kill."
           pure []
         threads -> do
-          debug_ $ "Killing tracked GHCI threads: " ++ show threads
+          debug $ "Killing tracked GHCI threads: " ++ show threads
           mapM killThread threads
           pure []
     )
@@ -83,3 +161,9 @@ killTrackedThreads = do
 {-# NOINLINE ghciThreads #-}
 ghciThreads :: MVar [ThreadId]
 ghciThreads = unsafePerformIO $ newMVar []
+
+
+
+-- Re-exports
+
+(&) = (Data.Function.&)
