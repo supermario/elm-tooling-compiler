@@ -1,22 +1,27 @@
-# Elm
+# Elm Tooling Compiler
 
-A delightful language for reliable webapps.
+:warning: This tool is yet unreleased, but discussion is welcome on [Incremental Elm's #elm-tooling-compiler](https://incrementalelm.com/chat/) channel.
 
-Check out the [Home Page](http://elm-lang.org/), [Try Online](http://elm-lang.org/try), or [The Official Guide](http://guide.elm-lang.org/)
+### Purpose
 
+Elm Tooling Compiler is a backwards-compatible fork of the Elm compiler extended to assist Elm tooling authors.
 
-<br>
+### Goals
 
-## Install
+- A one-shot command to get the Haskell development environment running easily and a REPL at your fingertips
+- A brief guide to getting quickly productive in the Elm compiler's "Elm-flavoured Haskell" codebase without any prior Haskell knowledge
+- Useful Elm Utility functions
+  - Elm syntax parsing
+  - Elm AST querying/manipulation
+- Easy scaffolding example for adding additional tooling commands
+- Alternate compilation modes
+  - Daemonised in-memory compile mode (WIP)
 
-✨ [Install](https://guide.elm-lang.org/install/elm.html) ✨
+### Non-goals
 
-For multiple versions, previous versions, and uninstallation, see the instructions [here](https://github.com/elm/compiler/blob/master/installers/README.md).
+- Elm language changes
+- Refactoring, bugfixing or improving the Elm compiler codebase (those issues should be raised [here](https://github.com/elm/compiler/issues)).
 
-<br>
+### Support
 
-## Help
-
-If you are stuck, ask around on [the Elm slack channel][slack]. Folks are friendly and happy to help with questions!
-
-[slack]: http://elmlang.herokuapp.com/
+This project is made possible with the support of [Lamdera](https://lamdera.com), [Blissfully](https://www.blissfully.com/) and [these wonderful sponsors](https://github.com/sponsors/supermario).
