@@ -2,6 +2,8 @@
 
 :warning: This tool is yet unreleased, but discussion is welcome on [Incremental Elm's #elm-tooling-compiler](https://incrementalelm.com/chat/) channel.
 
+See the [Project page](https://github.com/users/supermario/projects/1).
+
 ### Purpose
 
 Elm Tooling Compiler is a backwards-compatible fork of the Elm compiler extended to assist Elm tooling authors.
