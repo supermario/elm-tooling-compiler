@@ -1,0 +1,13 @@
+
+# Works to build a linux-aarch64 binary when run on macos-aarch64
+
+FROM ubuntu:latest
+
+RUN apt update
+RUN apt-get --assume-yes install curl git llvm-13 llvm libnuma-dev
+RUN curl -sSL https://get.haskellstack.org/ | sh
+
+ADD . / elm/
+WORKDIR /elm
+RUN stack setup
+RUN stack install --verbose
