@@ -7,7 +7,31 @@ RUN apt update
 RUN apt-get --assume-yes install curl git llvm-13 llvm libnuma-dev
 RUN curl -sSL https://get.haskellstack.org/ | sh
 
-ADD . / elm/
 WORKDIR /elm
+
+# Setup GHC
+COPY stack.yaml ./
+COPY elm.cabal ./
 RUN stack setup
-RUN stack install --verbose
+
+# Install packages
+COPY stack.yaml.lock ./
+RUN stack build --only-dependencies
+
+# Compile binary
+# COPY ./ .
+COPY compiler/src ./compiler/src
+COPY builder/src ./builder/src
+COPY terminal/impl ./terminal/impl
+COPY terminal/src ./terminal/src
+COPY reactor ./reactor
+COPY LICENSE ./LICENSE
+
+COPY ext-common ./ext-common
+COPY ext-sentry ./ext-sentry
+
+RUN stack install
+
+RUN ls -alh /root/.local/bin/elmx
+RUN strip /root/.local/bin/elmx
+RUN ls -alh /root/.local/bin/elmx
