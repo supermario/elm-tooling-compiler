@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -ex                                                   # Be verbose and exit immediately on error instead of trying to continue
 
-buildTag="elm-linux-aarch64-glibc"
+echo "Deprecated, please use the static build-linux-aarch64-musl.sh build instead."
+exit
+
+buildTag="elm-0.19.1-linux-aarch64-glibc"
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -ex                                                   # Be verbose and exit immediately on error instead of trying to continue
 
-buildTag="elm-macos-arm64"
+buildTag="elm-0.19.1-macos-arm64"
 
 ghcup install ghc 9.0.2 --set
 ghcup install cabal 3.6.2.0 --set

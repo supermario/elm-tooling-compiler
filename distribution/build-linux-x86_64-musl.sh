@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -ex                                                   # Be verbose and exit immediately on error instead of trying to continue
 
-buildTag="elm-linux-x86_64-musl"
+buildTag="elm-0.19.1-linux-x86_64-musl"
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 

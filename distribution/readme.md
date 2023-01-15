@@ -3,13 +3,13 @@
 
 Distributions for the following architectures are currently supported:
 
-| Build                   | Linking | Supported build hosts                   |
-| ----------------------- | ------- | --------------------------------------- |
-| `elm-macos-x86_64`      | Dynamic | `macos-x86_64`, `macos-arm64` (Rosetta) |
-| `elm-macos-arm64`       | Dynamic | `macos-arm64` + llvm                    |
-| `elm-linux-x86_64-musl` | Static  | `linux-x86_64`, `macos-x86_64` (Docker) |
-| `elm-linux-arm64-glibc` | Dynamic | `linux-arm64`, `macos-arm64` (Docker)   |
-| `elm-win-x86_64`        | Dynamic | `win-x86_64`                            |
+| Build                          | Linking | Supported build hosts                   |
+| ------------------------------ | ------- | --------------------------------------- |
+| `elm-0.19.1-macos-x86_64`      | Dynamic | `macos-x86_64`, `macos-arm64` (Rosetta) |
+| `elm-0.19.1-macos-arm64`       | Dynamic | `macos-arm64` + llvm                    |
+| `elm-0.19.1-linux-x86_64-musl` | Static  | `linux-x86_64`/`macos-x86_64` (Docker)  |
+| `elm-0.19.1-linux-arm64-musl`  | Static  | `linux-arm64`/`macos-arm64` (Docker)    |
+| `elm-0.19.1-win-x86_64`        | Dynamic | `win-x86_64`                            |
 
 
 ## Building an Elm compiler binary

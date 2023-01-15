@@ -22,5 +22,9 @@ COPY terminal terminal
 COPY LICENSE ./
 
 RUN cabal build $CABALOPTS --ghc-options="$GHCOPTS"
-RUN cp `cabal list-bin .` ./elm
+
+RUN cp dist-newstyle/build/aarch64-linux/ghc-8.10.7/elm-0.19.1/x/elm/build/elm/elm ./elm
+# Once we're on a newer cabal, we can drop hardcoding the previous command
+# RUN cp `cabal list-bin .` ./elm
+
 RUN strip elm
