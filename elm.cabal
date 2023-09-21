@@ -203,13 +203,12 @@ Executable elm
         Paths_elm
 
     Build-depends:
-        ansi-terminal >= 0.8 && < 0.9,
+        ansi-terminal >= 0.11 && < 0.12,
         ansi-wl-pprint >= 0.6.8 && < 0.7,
         base >=4.11 && <5,
         binary >= 0.8 && < 0.9,
         bytestring >= 0.9 && < 0.12,
-        containers,
-            -- >= 0.5.8.2 && < 0.6,
+        containers >= 0.6.7 && < 0.7,
         directory >= 1.2.3.0 && < 2.0,
         edit-distance >= 0.2 && < 0.3,
         file-embed,
@@ -223,8 +222,7 @@ Executable elm
         http-types >= 0.12 && < 1.0,
         language-glsl >= 0.3,
         mtl >= 2.2.1 && < 3,
-        network,
-            -- >= 2.4 && < 2.7,
+        network >= 3.1.4.0 && < 3.2,
         parsec,
         process,
         raw-strings-qq,
