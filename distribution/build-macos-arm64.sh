@@ -7,7 +7,6 @@ bin=distribution/dist/$buildTag
 
 
 ghcVersion=9.4.6
-# ghcVersion=9.2.1
 cabalVersion=3.10.1.0
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -26,7 +25,6 @@ if ! ghcup --version; then
   exit 1;
 fi
 
-
                                                           # Ensure correct arch toolchain is installed, or install it
                                                           # Hopefully in future ghcup has better multi-arch support
 if ! ls -alh "$ghc"; then
@@ -36,16 +34,8 @@ if ! $cabal --version | grep $cabalVersion; then
   ghcup install cabal "$cabalVersion" --isolate "$isolate" --force
 fi
 
-# llvmPath="/opt/homebrew/opt/llvm@13"
-# "$llvmPath"/bin/opt --version               # The arm64 build currently requires llvm until we get to GHC 9.4+
-
 
 cd "$scriptDir/.."                                        # Move into the project root
-
-# ffiLibs="$(xcrun --show-sdk-path)/usr/include/ffi"        # Workaround for GHC9.0.2 bug until we can use GHC9.2.3+
-# export C_INCLUDE_PATH=$ffiLibs                            # https://gitlab.haskell.org/ghc/ghc/-/issues/20592#note_436353
-
-# export PATH="$llvmPath/bin:$PATH"                       # The arm64 build currently requires llvm until we get to GHC 9.4+
 
 $cabal update
 $cabal build -j4                                          # Build with concurrency 4
