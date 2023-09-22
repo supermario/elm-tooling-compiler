@@ -8,7 +8,7 @@ scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$scriptDir/.."                                        # Move into the project root
 
                                                           # Build in Docker
-docker build --platform linux/amd64 \
+docker build --progress=plain --platform linux/amd64 \
   -t $buildTag \
   -f distribution/docker/x86_64-musl.dockerfile .
 

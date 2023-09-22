@@ -1,6 +1,7 @@
 elm-stuff
 dist
 dist-newstyle
+ghcup
 cabal-dev
 .cabal-sandbox/
 cabal.sandbox.config

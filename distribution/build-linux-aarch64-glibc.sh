@@ -8,7 +8,7 @@ scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$scriptDir/.."                                        # Move into the project root
 
                                                           # Build in Docker
-docker build --platform linux/arm64 \
+docker build --progress=plain --platform linux/arm64 \
   -t $buildTag \
   -f distribution/docker/aarch64-glibc.dockerfile .
 
